@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>qwalks</title>
+        <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+        <script src="https://unpkg.com/mathjs@5.1.2/dist/math.min.js"></script>
+        <script>
+function e(){for(idx=0;idx<n_vertices;++idx)polar=psi.get([idx]).toPolar(),polar.phi<0&&(polar.phi+=2*math.PI),h[idx]=math.round(360*polar.phi/2/math.PI),l[idx]=math.round(100*polar.r)}function i(){ctx.clearRect(0,0,canvas.width,canvas.height),function(){for(idx in ctx.lineWidth=3,adj_list)src=adj_list[idx][0],dst=adj_list[idx][1],t=src,e=dst,ctx.beginPath(),ctx.moveTo(xs[t],ys[t]),ctx.lineTo(xs[e],ys[e]),ctx.stroke();var t,e}(),function(){for(ctx.lineWidth=5,idx=0;idx<n_vertices;++idx)ctx.beginPath(),ctx.arc(xs[idx],ys[idx],radius,0,2*math.PI),ctx.stroke(),ctx.fillStyle="hsl("+h[idx]+", 100%, "+l[idx]+"%)",ctx.fill()}()}function t(){psi=math.multiply(u,psi),e(),i(),window.requestAnimationFrame(t)}function d(){if("run"!=g_mode&&(g_mode="run",!math.equal(math.norm(psi),0))){for(idx in modes)document.getElementById(modes[idx]).classList.remove("pure-button-active"),document.getElementById(modes[idx]).classList.add("pure-button-disabled");document.getElementById("run").classList.add("pure-button-active"),t()}}function s(t){switch(rect=canvas.getBoundingClientRect(),x=t.clientX-rect.left,y=t.clientY-rect.top,sign=1,g_mode){case"vertex":++n_vertices,xs.push(x),ys.push(y),psi.set([n_vertices-1],math.complex(0)),adj.resize([n_vertices,n_vertices],0),u=math.expm(math.multiply(math.complex(0,alpha),adj)),e(),i();break;case"edge":for(idx=0;idx<n_vertices;++idx)math.pow(x-xs[idx],2)+math.pow(y-ys[idx],2)<=math.pow(radius,2)&&(null==fst?fst=idx:fst!=idx&&(adj_list.push([fst,idx]),adj.set([fst,idx],1),adj.set([idx,fst],1),u=math.expm(math.multiply(math.complex(0,alpha),adj)),fst=void 0,i()));break;case"minus":sign=-1;case"plus":for(idx=0;idx<n_vertices;++idx)if(math.pow(x-xs[idx],2)+math.pow(y-ys[idx],2)<=math.pow(radius,2)){if(!math.equal(psi.get([idx]),math.complex(0)))break;n_exitons?psi.set([idx],math.complex(sign/math.sqrt(n_exitons))):psi.set([idx],math.complex(sign)),++n_exitons,document.getElementById("run").classList.remove("pure-button-disabled"),psi=math.divide(psi,math.norm(psi)),e(),i()}}}function n(t){return function(){for(idx in g_mode=t,modes)document.getElementById(modes[idx]).classList.remove("pure-button-active");document.getElementById(t).classList.add("pure-button-active")}}radius=20,alpha=.01,document.addEventListener("DOMContentLoaded",function(){for(idx in n_vertices=0,xs=[],ys=[],h=[],l=[],psi=math.matrix(),adj=math.matrix(),adj_list=[],n_exitons=0,g_mode="vertex",fst=void 0,canvas=document.getElementById("myCanvas"),ctx=canvas.getContext("2d"),modes=["vertex","edge","plus","minus"],modes)mode=modes[idx],document.getElementById(mode).addEventListener("click",n(mode));document.getElementById("run").addEventListener("click",d),canvas.addEventListener("click",s)});
+        </script>
+    </head>
+    <body style="margin: 50px 50px;">
+        <canvas id="myCanvas" width="640" height="480" style="border: 3px solid #000000;"></canvas>
+        <br>
+        <button class="pure-button pure-button-active" id="vertex">Add vertices</button>
+        <button class="pure-button" id="edge">Add edges</button>
+        <button class="pure-button" id="plus">Add (+1) excitons</button>
+        <button class="pure-button" id="minus">Add (-1) excitons</button>
+        <button class="pure-button pure-button-disabled" id="run">Run</button>
+    </body>
+</html>
